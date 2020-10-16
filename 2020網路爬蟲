@@ -1,0 +1,42 @@
+"owlab.wordpress.com/2016/06/28/python-網路爬蟲（基礎篇）/"
+一、Setup
+
+安裝網頁擷取套件 requests
+
+1
+pip install requests
+安裝網頁解析套件 BeautifulSoup4
+
+1
+pip install beautifulsoup4
+在 Python 環境中使用這兩個套件
+
+1
+2
+import requests
+from bs4 import BeautifulSoup
+二、網頁擷取
+
+完成了基本的 setup 之後，建議到想要爬取的網站根目錄下的 robots.txt 查看，並確保資料的爬取合乎該網站的使用規範。
+
+使用 GET 方法取得網頁資料
+
+res = requests.get(“http://example.com”)
+print(res.text)
+使用 POST 方法取得網頁資料
+
+payload = {
+   ‘Some sample’:’Data Content’,
+   ‘Some sample’:’Data Content’,
+   }
+res = requests.post(“http://example.com”, data = payload)
+print(res.text)
+三、對所取得的網頁資料進行解析
+
+soup = BeautifulSoup(res.text)
+print(item.select(‘.item’)[0].text)
+這裡的 item 為我們想擷取的資料的 class name，順道介紹 SelectorGadget 這個 Chrome 擴充套件，它可以幫我們快速找到資料對應的 class name。
+
+所擷取下來的資料是一個 list 的形式，如果符合 class name的資料有多筆，則會依序存入這個 list，因此上述的[0] 代表的是list中的第一筆，實際應用上我們常會搭配迴圈來將多筆資料一次存取。.text 這個 method 則可以幫助我們取得不含 html 標籤的純文字內容。
+
+能夠成功 print 出想抓取的資料內容，就已經完成一個最基本的網頁爬蟲了。
